@@ -38,7 +38,9 @@ public class CPU{
 				}
 				else{
 					if(qClock == 0 || newJob){
+						llq++;
 						checkLLQ();
+						qChecker();
 						newJob = false;
 					}else;
 				}
@@ -70,13 +72,25 @@ public class CPU{
 	}
 	public void checkLLQ(){
 		if(llq == 2){
-			
+			q2.insert(cpu.remove());//insert job String into Q2
+			cpu.remove();//remove llq as it is a declared variable within the CPU.insert
+			cpu.remove();//remove qClock as it is stated wsithin the CPU.insert
+			q2.insert(cpu.remove());//Insert job time countdown into Q2
+			q2.insert(cpu.remove());//insert work timer into Q2
 		}
 		else if(llq == 3){
-			
+			q3.insert(cpu.remove());//insert job String into Q2
+			cpu.remove();//remove llq as it is a declared variable within the CPU.insert
+			cpu.remove();//remove qClock as it is stated wsithin the CPU.insert
+			q3.insert(cpu.remove());//Insert job time countdown into Q2
+			q3.insert(cpu.remove());//insert work timer into Q2
 		}
 		else if(llq == 4){
-			
+			q4.insert(cpu.remove());//insert job String into Q2
+			cpu.remove();//remove llq as it is a declared variable within the CPU.insert
+			cpu.remove();//remove qClock as it is stated wsithin the CPU.insert
+			q4.insert(cpu.remove());//Insert job time countdown into Q2
+			q4.insert(cpu.remove());//insert work timer into Q2
 		}
 	}
 	public void qChecker(){
@@ -94,7 +108,7 @@ public class CPU{
 			cpu.insert(q2.remove());
 			cpu.insert(2);
 			cpu.insert(4);
-			cpu.insert(jobClock);
+			cpu.insert(q2.remove());
 			cpu.insert(q2.remove());
 			busy = true;
 		}
@@ -103,7 +117,7 @@ public class CPU{
 			cpu.insert(q3.remove());
 			cpu.insert(3);
 			cpu.insert(8);
-			cpu.insert(jobClock);
+			cpu.insert(q3.remove());
 			cpu.insert(q3.remove());
 			busy = true;
 		}
@@ -112,7 +126,7 @@ public class CPU{
 			cpu.insert(q4.remove());
 			cpu.insert(3);
 			cpu.insert(16);
-			cpu.insert(jobClock);
+			cpu.insert(q4.remove());
 			cpu.insert(q4.remove());
 			busy = true;
 		}
