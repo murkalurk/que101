@@ -32,7 +32,7 @@ public class CPU{
 				cpuFill();
 				if(jobClock == 0){
 					cpuClear();
-					System.out.println("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + workTimer + "\t" + cpu.isEmpty());
+					System.out.println("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock-enQue()) + "\t" + cpu.isEmpty());
 					busy = false;
 					qChecker();
 				}
@@ -46,6 +46,23 @@ public class CPU{
 				}
 			}
 		simulation(que);
+		}else{
+			if(busy){
+				cpuClock++;
+				setValues();
+				cpuFill();
+				if(jobClock == 0){
+					cpu.remove();cpu.remove();cpu.remove();cpu.remove();cpu.remove();
+					System.out.println("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock - enQue()) + "\t" + cpu.isEmpty() + "\t" + llq);
+					busy = false;
+					qChecker();
+				}
+				else{
+					if(qClock == 0)
+						checkLLQ();
+				}
+			simulation(que);
+			}
 		}
 		}
 	public void cpuClear(){
@@ -87,9 +104,9 @@ public class CPU{
 		}
 		else if(llq == 4){
 			q4.insert(cpu.remove());//insert job String into Q2
-			cpu.remove();//remove llq as it is a declared variable within the CPU.insert
-			cpu.remove();//remove qClock as it is stated wsithin the CPU.insert
-			q4.insert(cpu.remove());//Insert job time countdown into Q2
+			cpu.remove();//remove LowerLevelQueue as it is a declared variable within the CPU.insert
+			cpu.remove();//remove qClock as it is stated within the CPU.insert
+			q4.insert(cpu.remove());//Insert job time count down into Q2
 			q4.insert(cpu.remove());//insert work timer into Q2
 		}
 	}
