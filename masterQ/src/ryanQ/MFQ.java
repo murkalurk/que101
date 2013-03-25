@@ -6,7 +6,6 @@ public class MFQ{
 	Scanner scan = new Scanner(new File("input.txt"));
 	Job job = new Job(scan);
 	CPU cpu = new CPU();
-
 	public MFQ()throws IOException{
 		
 	}
@@ -24,8 +23,5 @@ public class MFQ{
 		cpu.simulation(job.jobQue());
 	}
 	public void outStats(){
-		if(!(job.jobQue()).isEmpty()){
-		System.out.println((job.jobQue()).remove());
-		outStats();}
 	}
 }

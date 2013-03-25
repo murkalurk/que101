@@ -19,41 +19,50 @@ public class CPU{
 	}
 	public void simulation(ObjectQueue que){
 		if(!que.isEmpty()){
-			initQue(que);
-			if(enQue() == cpuClock){
-				inNew(que);
-			}else;
-			if(!busy)
-				qChecker();
+			notEmpty(que);
+		}else{
+			quesEmpty(que);
+		}
+	}
+	public void quesEmpty(ObjectQueue que){
+		if(busy){
+			cpuClock++;
+			setValues();
+			cpuFill();
+			if(jobClock == 0){
+				jobOver();
+			}
 			else{
-				setValues();
-				cpuFill();
-				if(jobClock == 0){
-					jobOver();
-				}
-				else{
-					if(qClock == 0 || newJob){
-						llqMove();
-						newJob = false;
-					}else;
+				if(qClock == 0){
+					llqMove();
 				}
 			}
 		simulation(que);
-		}else{
-			if(busy){
-				cpuClock++;
-				setValues();
-				cpuFill();
-				if(jobClock == 0){
-					jobOver();
-				}
-				else{
-					if(qClock == 0){
-						llqMove();
-					}
-				}
-			simulation(que);
-			}
+		}
+	}
+	public void notEmpty(ObjectQueue que){
+		initQue(que);
+		if(enQue() == cpuClock){
+			inNew(que);
+		}else;
+		if(!busy)
+			qChecker();
+		else{
+			simBusy();
+		}
+	simulation(que);
+	}
+	public void simBusy(){
+		setValues();
+		cpuFill();
+		if(jobClock == 0){
+			jobOver();
+		}
+		else{
+			if(qClock == 0 || newJob){
+				llqMove();
+				newJob = false;
+			}else;
 		}
 	}
 	public void jobOver(){
