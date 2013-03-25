@@ -32,13 +32,14 @@ public class CPU{
 				cpuFill();
 				if(jobClock == 0){
 					cpuClear();
-					System.out.println("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock-enQue()) + "\t" + cpu.isEmpty());
+					System.out.println("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock-enQue()) + "\t" + llq);
 					busy = false;
 					qChecker();
 				}
 				else{
 					if(qClock == 0 || newJob){
-						llq++;
+						if(llq != 4)
+							llq++;else;
 						checkLLQ();
 						qChecker();
 						newJob = false;
@@ -52,14 +53,18 @@ public class CPU{
 				setValues();
 				cpuFill();
 				if(jobClock == 0){
-					cpu.remove();cpu.remove();cpu.remove();cpu.remove();cpu.remove();
-					System.out.println("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock - enQue()) + "\t" + cpu.isEmpty() + "\t" + llq);
+					cpuClear();
+					System.out.println("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock - enQue()) + "\t" + llq);
 					busy = false;
 					qChecker();
 				}
 				else{
-					if(qClock == 0)
+					if(qClock == 0){
+						if(llq != 4)
+							llq++;else;
 						checkLLQ();
+						qChecker();
+					}
 				}
 			simulation(que);
 			}
@@ -141,7 +146,7 @@ public class CPU{
 		else if(q1.isEmpty() && q2.isEmpty() && q3.isEmpty() && !q4.isEmpty()){
 			getWorkTime(q4);
 			cpu.insert(q4.remove());
-			cpu.insert(3);
+			cpu.insert(4);
 			cpu.insert(16);
 			cpu.insert(q4.remove());
 			cpu.insert(q4.remove());
@@ -163,7 +168,7 @@ public class CPU{
 		q1.insert(0);
 		newJob = true;
 		workTimer = 0;
-		System.out.println("ADDED\t\t" + jobID() + "\t" + cpuClock + "\t" + workTime() + "\t\t" + workTimer + "\t" + cpu.isEmpty());
+		System.out.println("ADDED\t\t" + jobID() + "\t" + cpuClock + "\t" + workTime() + "\t\t" + workTimer);
 	}
 	public void getWorkTime(ObjectQueue qNum){
 		s = (String)qNum.query();

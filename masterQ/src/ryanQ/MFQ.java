@@ -17,7 +17,7 @@ public class MFQ{
 		job.setJobs();
 	}
 	public void outputHeader(){
-		System.out.println("ACTION\t\tPID\tSYSTIME\tWORKTIME\tTIMER\tEMPTY?");
+		System.out.println("ACTION\t\tPID\tSYSTIME\tWORKTIME\tTIMER\tLLQ:");
 		writer.println("enQue\tjobID\tworkTime");
 	}
 	public void runSimulation(){
