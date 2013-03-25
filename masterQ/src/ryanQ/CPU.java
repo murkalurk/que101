@@ -15,6 +15,7 @@ public class CPU{
 	ObjectQueue q2 = new ObjectQueue();
 	ObjectQueue q3 = new ObjectQueue();
 	ObjectQueue q4 = new ObjectQueue();
+	ObjectQueue q5 = new ObjectQueue();
 	public CPU(){
 	}
 	public void simulation(ObjectQueue que){
@@ -67,7 +68,7 @@ public class CPU{
 	}
 	public void jobOver(){
 		cpuClear();
-		System.out.println("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock - enQue()) + "\t" + llq);
+		q5.insert("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock - enQue()) + "\t" + llq);
 		busy = false;
 		qChecker();
 	}
@@ -92,6 +93,7 @@ public class CPU{
 		s = (String)cpu.remove();
 		st = s.split(" ");
 		i = 0;
+		intCheck();
 		llq = (Integer)cpu.remove();
 		qClock = (Integer)cpu.remove();
 		jobClock = (Integer)cpu.remove();
@@ -158,12 +160,22 @@ public class CPU{
 		s = (String)que.query();
 		st = s.split("\\s+");
 		i = stringCut();
+		intCheck();
 	}
-
+	public void intCheck(){
+		try{
+			Integer.parseInt(st[i]);
+			Integer.parseInt(st[i+1]);
+			Integer.parseInt(st[i+2]);
+		}catch(Exception e){
+			System.out.println("Illegal input in Job Queue");
+			System.exit(1);
+		}
+	}
 	public void inNew(ObjectQueue que){
 		q1.insert(que.remove());
 		newJob = true;
-		System.out.println("ADDED\t\t" + jobID() + "\t" + cpuClock + "\t" + workTime());
+		q5.insert("ADDED\t\t" + jobID() + "\t" + cpuClock + "\t" + workTime());
 	}
 	public void getWorkTime(ObjectQueue qNum){
 		s = (String)qNum.query();
@@ -172,6 +184,9 @@ public class CPU{
 	}
 	public int stringCut(){
 		return s.startsWith(" ")? 1 : 0;
+	}
+	public ObjectQueue queReturn(){
+		return q5;
 	}
 	public int enQue(){
 		return Integer.parseInt(String.valueOf(st[i]));	
