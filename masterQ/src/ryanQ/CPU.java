@@ -29,17 +29,6 @@ public class CPU{
 	public CPU(){
 	}
 	/**
-	 * All jobs run through this method.
-	 * @param que Takes in the Queue containing all of the jobs.
-	 */
-	public void simulation(ObjectQueue que){
-		if(!que.isEmpty()){
-			notEmpty(que);
-		}else{
-			quesEmpty(que);
-		}
-	}
-	/**
 	 * Runs when the Job list has been emptied and empties the remaining Queues.
 	 * Checks if the job is completed.
 	 * If not, checks if there is remaining Quantum time.
@@ -52,15 +41,12 @@ public class CPU{
 			cpuClock++;
 			setValues();
 			cpuFill();
-			if(jobClock == 0){
+			if(jobClock == 0)
 				jobOver();
-			}
 			else{
-				if(qClock == 0){
+				if(qClock == 0)
 					llqMove();
-				}
 			}
-		simulation(que);
 		}
 	}
 	/**
@@ -77,10 +63,8 @@ public class CPU{
 		}else;
 		if(!busy)
 			qChecker();
-		else{
+		else
 			simBusy();
-		}
-	simulation(que);
 	}
 	/**
 	 * Runs when the Simulation's busy flag is set to true.
@@ -92,9 +76,8 @@ public class CPU{
 		busyTime++;
 		setValues();
 		cpuFill();
-		if(jobClock == 0){
+		if(jobClock == 0)
 			jobOver();
-		}
 		else{
 			if(qClock == 0 || newJob){
 				llqMove();
@@ -115,6 +98,11 @@ public class CPU{
 		busy = false;
 		qChecker();
 	}
+	public void overLine(){
+		System.out.println("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock - enQue()) + "\t" + llq);
+	}
+	public int cpuTime(){
+		return cpuClock;}
 	/**
 	 * Returns total time the jobs have spent inactive.
 	 * @return inactiveTime
@@ -149,6 +137,13 @@ public class CPU{
 	 */
 	public int averageRun(){
 		return busyTime;
+	}
+	/**
+	 * Returns true if the System is busy.
+	 * @return true or false
+	 */
+	public boolean busy(){
+		return busy;
 	}
 	/**
 	 * Moves the Job to the next lower level Queue.
@@ -263,6 +258,31 @@ public class CPU{
 		intCheck();
 	}
 	/**
+	 * Sets values for use in the GUI.
+	 */
+	public void setVals(){
+		if(!cpu.isEmpty())
+			s = (String)cpu.query();
+		else
+			s = "0 0 0";
+		st = s.split("\\s+");
+		i = stringCut();
+	}
+	/**
+	 * Holds the value for the Lowest Level Queue for the GUI.
+	 * @return Lowest Level Queue
+	 */
+	public int llq(){
+		return llq;
+	}
+	/**
+	 * Holds the value of the Quantum for the GUI.
+	 * @return Quantum Timer
+	 */
+	public int qClock(){
+		return qClock;
+	}
+	/**
 	 * Checks to make sure the value being read into job is a valid integer.
 	 * If not, throws an error message and exits.
 	 */
@@ -313,14 +333,14 @@ public class CPU{
 	 * @return st[i]
 	 */
 	public int enQue(){
-		return Integer.parseInt(String.valueOf(st[i]));	
+			return Integer.parseInt(String.valueOf(st[i]));
 	}
 	/**
 	 * Returns the Job ID.
 	 * @return st[i+1]
 	 */
 	public int jobID(){
-		return Integer.parseInt(String.valueOf(st[i+1]));
+			return Integer.parseInt(String.valueOf(st[i+1]));
 	}
 	/**
 	 * Returns the amount of time which it will take to work through.

@@ -48,7 +48,16 @@ public class MFQ{
 	 * Runs the simulation.
 	 */
 	public void runSimulation(){
-		cpu.simulation(job.jobQue());
+		if(!job.jobQue().isEmpty()){
+			cpu.notEmpty(job.jobQue());
+			runSimulation();
+		}else{
+			if(cpu.busy()){
+				cpu.quesEmpty(job.jobQue());
+				runSimulation();
+			}
+		}
+		
 	}
 	/**
 	 * Outputs the stats from the simulation.
