@@ -5,7 +5,7 @@ package ryanQ;
  */
 public class CPU{
 	private int cpuClock = 0,
-				i;
+			i;
 	private boolean busy = false;
 	private boolean newJob = false;
 	private int jobClock = 0;
@@ -22,7 +22,7 @@ public class CPU{
 	ObjectQueue q2 = new ObjectQueue();
 	ObjectQueue q3 = new ObjectQueue();
 	ObjectQueue q4 = new ObjectQueue();
-	ObjectQueue q5 = new ObjectQueue();
+	ObjectQueue outQue = new ObjectQueue();
 	/**
 	 * Empty constructor for CPU class.
 	 */
@@ -92,7 +92,7 @@ public class CPU{
 	 */
 	public void jobOver(){
 		cpuClear();
-		q5.insert("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock - enQue()) + "\t" + llq);
+		outQue.insert("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock - enQue()) + "\t" + llq);
 		waitTime = waitTime + (cpuClock - enQue());
 		inactiveTime = inactiveTime + (cpuClock - enQue() - workTime());
 		busy = false;
@@ -303,7 +303,7 @@ public class CPU{
 	public void inNew(ObjectQueue que){
 		q1.insert(que.remove());
 		newJob = true;
-		q5.insert("ADDED\t\t" + jobID() + "\t" + cpuClock + "\t" + workTime());
+		outQue.insert("ADDED\t\t" + jobID() + "\t" + cpuClock + "\t" + workTime());
 	}
 	/**
 	 * Gets the work time of the Job currently on the highest level Queue.
@@ -323,24 +323,24 @@ public class CPU{
 	}
 	/**
 	 * Returns the Queue in which all of the returned information is stored.
-	 * @return q5
+	 * @return outQue
 	 */
 	public ObjectQueue queReturn(){
-		return q5;
+		return outQue;
 	}
 	/**
 	 * Returns the time in which the Job is added into the System.
 	 * @return st[i]
 	 */
 	public int enQue(){
-			return Integer.parseInt(String.valueOf(st[i]));
+		return Integer.parseInt(String.valueOf(st[i]));
 	}
 	/**
 	 * Returns the Job ID.
 	 * @return st[i+1]
 	 */
 	public int jobID(){
-			return Integer.parseInt(String.valueOf(st[i+1]));
+		return Integer.parseInt(String.valueOf(st[i+1]));
 	}
 	/**
 	 * Returns the amount of time which it will take to work through.
@@ -349,4 +349,4 @@ public class CPU{
 	public int workTime(){
 		return Integer.parseInt(String.valueOf(st[i+2]));
 	}
-	}
+}

@@ -17,7 +17,7 @@ public class MFQ{
 	 * @throws IOException	 uses the Scanner class, which throws an IOException.
 	 */
 	public MFQ()throws IOException{
-		
+
 	}
 	/**
 	 * MFQ constructor which takes in the PrintWriter from the Driver.
@@ -57,7 +57,7 @@ public class MFQ{
 				runSimulation();
 			}
 		}
-		
+
 	}
 	/**
 	 * Outputs the stats from the simulation.

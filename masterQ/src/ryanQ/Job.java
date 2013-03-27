@@ -24,9 +24,9 @@ public class Job {
 	 */
 	public void setJobs(){
 		if(scan.hasNextLine()){
-		s = scan.nextLine();
-		que.insert(s);
-		setJobs();}
+			s = scan.nextLine();
+			que.insert(s);
+			setJobs();}
 	}
 	/**
 	 * creates a reference point for MFQ to take the contents of the Queue.

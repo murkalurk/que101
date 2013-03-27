@@ -18,4 +18,6 @@ public class Driver {
 		mfq.outputHeader();
 		mfq.runSimulation();
 		mfq.outStats();
-		pw.close();}}
+		pw.close();
+	}
+}
