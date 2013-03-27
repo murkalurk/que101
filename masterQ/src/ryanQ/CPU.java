@@ -1,4 +1,5 @@
 package ryanQ;
+import java.io.*;
 /**
  * Executes the Jobs collected by the Job class to output into MFQ.
  * @author Ryan Wagner
@@ -17,16 +18,17 @@ public class CPU{
 	private int waitTime = 0;
 	private int inactiveTime = 0;
 	private int responseTime = 0;
+	private int jobNum = 0;
 	ObjectQueue cpu = new ObjectQueue();
 	ObjectQueue q1 = new ObjectQueue();
 	ObjectQueue q2 = new ObjectQueue();
 	ObjectQueue q3 = new ObjectQueue();
 	ObjectQueue q4 = new ObjectQueue();
-	ObjectQueue outQue = new ObjectQueue();
 	/**
 	 * Empty constructor for CPU class.
 	 */
-	public CPU(){
+	public CPU()throws IOException{
+		
 	}
 	/**
 	 * Runs when the Job list has been emptied and empties the remaining Queues.
@@ -35,14 +37,14 @@ public class CPU{
 	 * If not, moves into a lower level Queue.
 	 * @param que Takes in the Queue containing all of the jobs.
 	 */
-	public void quesEmpty(ObjectQueue que){
+	public void quesEmpty(ObjectQueue que, PrintWriter writer){
 		if(busy){
 			busyTime++;
 			cpuClock++;
-			setValues();
+			setValues(writer);
 			cpuFill();
 			if(jobClock == 0)
-				jobOver();
+				jobOver(writer);
 			else{
 				if(qClock == 0)
 					llqMove();
@@ -55,16 +57,17 @@ public class CPU{
 	 * Also, checks to see if the system already has a job on the Queue.
 	 * @param que Takes in the Queue containing all of the jobs.
 	 */
-	public void notEmpty(ObjectQueue que){
-		initQue(que);
+	public void notEmpty(ObjectQueue que, PrintWriter writer){
+		initQue(que, writer);
 		if(enQue() == cpuClock){
 			responseTime = responseTime + enQue();
-			inNew(que);
+			jobNum++;
+			inNew(que, writer);
 		}else;
 		if(!busy)
 			qChecker();
 		else
-			simBusy();
+			simBusy(writer);
 	}
 	/**
 	 * Runs when the Simulation's busy flag is set to true.
@@ -72,12 +75,12 @@ public class CPU{
 	 * If not, checks if the Quantum is over or if a New job has come to the system.
 	 * If so, moves the Job to the next Lower Level Queue.
 	 */
-	public void simBusy(){
+	public void simBusy(PrintWriter writer){
 		busyTime++;
-		setValues();
+		setValues(writer);
 		cpuFill();
 		if(jobClock == 0)
-			jobOver();
+			jobOver(writer);
 		else{
 			if(qClock == 0 || newJob){
 				llqMove();
@@ -90,17 +93,23 @@ public class CPU{
 	 * Clears the CPU so that there will be no conflicts when the next job is loaded.
 	 * Sets the CPU busy flag to false.
 	 */
-	public void jobOver(){
+	public void jobOver(PrintWriter writer){
 		cpuClear();
-		outQue.insert("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock - enQue()) + "\t" + llq);
+		System.out.println("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock - enQue()) + "\t" + llq);
+		try{
+		writer.println("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock - enQue()) + "\t" + llq);
+		}catch(NullPointerException e){
+			
+		}
 		waitTime = waitTime + (cpuClock - enQue());
 		inactiveTime = inactiveTime + (cpuClock - enQue() - workTime());
 		busy = false;
 		qChecker();
 	}
-	public void overLine(){
-		System.out.println("REMOVED\t\t" + jobID() + "\t" + cpuClock + "\t" + jobClock + "\t\t" + (cpuClock - enQue()) + "\t" + llq);
-	}
+	/**
+	 * Returns the current CPU time for the GUI.
+	 * @return cpuClock
+	 */
 	public int cpuTime(){
 		return cpuClock;}
 	/**
@@ -174,11 +183,11 @@ public class CPU{
 	/**
 	 * Sets the current values attached with the active Job.
 	 */
-	public void setValues(){
+	public void setValues(PrintWriter writer){
 		s = (String)cpu.remove();
 		st = s.split(" ");
 		i = 0;
-		intCheck();
+		intCheck(writer);
 		llq = (Integer)cpu.remove();
 		qClock = (Integer)cpu.remove();
 		jobClock = (Integer)cpu.remove();
@@ -250,12 +259,12 @@ public class CPU{
 	 * Initializes the Queue and ticks the clock.
 	 * @param que Takes in the Queue containing all of the jobs. 
 	 */
-	public void initQue(ObjectQueue que){
+	public void initQue(ObjectQueue que, PrintWriter writer){
 		cpuClock++;
 		s = (String)que.query();
 		st = s.split("\\s+");
 		i = stringCut();
-		intCheck();
+		intCheck(writer);
 	}
 	/**
 	 * Sets values for use in the GUI.
@@ -286,13 +295,14 @@ public class CPU{
 	 * Checks to make sure the value being read into job is a valid integer.
 	 * If not, throws an error message and exits.
 	 */
-	public void intCheck(){
+	public void intCheck(PrintWriter writer){
 		try{
 			Integer.parseInt(st[i]);
 			Integer.parseInt(st[i+1]);
 			Integer.parseInt(st[i+2]);
 		}catch(Exception e){
 			System.out.println("Illegal input in Job Queue");
+			writer.println("Illegal input in Job Queue");
 			System.exit(1);
 		}
 	}
@@ -300,10 +310,18 @@ public class CPU{
 	 * Inserts a new Job into Q1.
 	 * @param que Takes in the Queue containing all of the jobs.
 	 */
-	public void inNew(ObjectQueue que){
+	public void inNew(ObjectQueue que, PrintWriter writer){
 		q1.insert(que.remove());
 		newJob = true;
-		outQue.insert("ADDED\t\t" + jobID() + "\t" + cpuClock + "\t" + workTime());
+		System.out.println("ADDED\t\t" + jobID() + "\t" + cpuClock + "\t" + workTime());
+		writer.println("ADDED\t\t" + jobID() + "\t" + cpuClock + "\t" + workTime());
+	}
+	/**
+	 * Returns the current job being worked on for the GUI.
+	 * @return jobNum
+	 */
+	public int jobNum(){
+		return jobNum;
 	}
 	/**
 	 * Gets the work time of the Job currently on the highest level Queue.
@@ -320,13 +338,6 @@ public class CPU{
 	 */
 	public int stringCut(){
 		return s.startsWith(" ")? 1 : 0;
-	}
-	/**
-	 * Returns the Queue in which all of the returned information is stored.
-	 * @return outQue
-	 */
-	public ObjectQueue queReturn(){
-		return outQue;
 	}
 	/**
 	 * Returns the time in which the Job is added into the System.

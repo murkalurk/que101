@@ -39,3 +39,10 @@ REMOVED		116	83	0		2	1
 REMOVED		111	118	0		74	4
 REMOVED		112	152	0		107	4
 REMOVED		107	155	0		137	4
+Total Jobs:	16.00
+Total Run Time:	155.00
+Average Response Time:	32.56
+Average Waiting Time:	16.94
+Average Turnaround:	26.31
+Average Throughput:	9.69
+Total idle:	5.00

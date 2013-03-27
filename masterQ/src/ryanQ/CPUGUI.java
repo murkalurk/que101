@@ -1,9 +1,9 @@
 package ryanQ;
 import java.io.*;
 /**
- * 
+ * GUI Extra Credit for MFQ Lab.
  * @author Ryan Wagner
- *
+ * @author Student 007222159
  */
 public class CPUGUI{
 	/**

@@ -9,8 +9,10 @@ import java.io.*;
  *
  */
 public class InheritGUI {
+	private PrintWriter writer = new PrintWriter(new FileWriter("csis.txt"));
 	CPUGUI gui = new CPUGUI();
 	CPU cpu = new CPU();
+	MFQ mfq = new MFQ(writer);
 	private int WIDTH = 450;
 	private int HEIGHT = 400;
 	/*
@@ -92,22 +94,21 @@ public class InheritGUI {
 		frame.remove(label20);
 		frame.remove(label21);
 		if(!que.isEmpty()){
-			cpu.notEmpty(que);
+			cpu.notEmpty(que ,writer);
 			runSim(que, frame);
 		}else{
 			if(cpu.busy()){
-				cpu.quesEmpty(que);
+				cpu.quesEmpty(que, writer);
 				runSim(que, frame);
 			}
 		}
+		writer.close();
 	}
 	/**
 	 * Outputs the raw Stats.
 	 */
 	public void outStats(){
 		System.out.println("ACTION\t\tPID\tSYSTIME\tWORKTIME\tTIMER\tLLQ:");
-		while (!cpu.queReturn().isEmpty())
-			System.out.println(cpu.queReturn().remove());
 	}
 	/**
 	 * Builds the GUI
@@ -124,7 +125,7 @@ public class InheritGUI {
 		GridLayout layout = new GridLayout(8,1);
 		frame.setLayout(layout);
 		frame.setVisible(true);
-		runSim(job.jobQue(), frame);
 		outStats();
+		runSim(job.jobQue(), frame);
 	}
 }

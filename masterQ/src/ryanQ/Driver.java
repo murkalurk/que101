@@ -5,7 +5,6 @@ import java.io.*;
  * Driver for the MFQ lab.
  * @author Ryan Wagner
  * @author Student ID: 007222159
- * @date 3/25/2013
  * @version 1.0.0
  *
  */
